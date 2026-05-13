@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智笔学府 | 专业学术论文代写服务</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-deep: #030712;
+            --bg-deep2: #0f172a;
+            --bg-card: rgba(255,255,255,0.04);
+            --cyan-primary: #22d3ee;
+            --cyan-light: #67e8f9;
+            --cyan-dark: #0891b2;
+            --blue-deep: #0369a1;
+            --blue-accent: #3b82f6;
+            --blue-glow: rgba(34,211,238,0.12);
+            --blue-glow2: rgba(59,130,246,0.1);
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255,255,255,0.55);
+            --text-muted: rgba(255,255,255,0.3);
+            --border-cyan: rgba(34,211,238,0.2);
+            --border-cyan-bright: rgba(34,211,238,0.55);
+            --border-blue: rgba(59,130,246,0.25);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ============ SCROLLBAR ============ */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(#22d3ee, #3b82f6); border-radius: 3px; }
+
+        /* ============ STARS CANVAS ============ */
+        #stars {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-atmosphere {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 70% 60% at 15% 10%, rgba(34,211,238,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 50% at 85% 20%, rgba(59,130,246,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 80% 70% at 50% 90%, rgba(99,102,241,0.06) 0%, transparent 60%);
+        }
+
+        /* ============ UTILITY ============ */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+        .section { padding: 120px 0; position: relative; z-index: 1; }
+        .text-gradient-cyan {
+            background: linear-gradient(135deg, #67e8f9 0%, #22d3ee 50%, #0891b2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .text-gradient-blue {
+            background: linear-gradient(135deg, #93c5fd 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ============ NAV ============ */
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: all 0.4s ease;
+        }
+        .nav.scrolled {
+            background: rgba(3,7,18,0.88);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(34,211,238,0.1);
+            padding: 14px 0;
+        }
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-decoration: none;
+            background: linear-gradient(135deg, #67e8f9, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links { display: flex; gap: 36px; list-style: none; }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0; height: 1px;
+            background: var(--cyan-primary);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover { color: var(--cyan-primary); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-cta {
+            padding: 10px 28px;
+            background: transparent;
+            border: 1px solid var(--cyan-primary);
+            color: var(--cyan-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .nav-cta:hover {
+            background: var(--cyan-primary);
+            color: var(--bg-deep);
+            box-shadow: 0 0 30px rgba(34,211,238,0.4);
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg-gradient {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 35%, rgba(34,211,238,0.1) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 50% 65%, rgba(59,130,246,0.07) 0%, transparent 50%);
+        }
+        .hero-orb {
+            position: absolute;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            animation: orbFloat 10s ease-in-out infinite;
+        }
+        .hero-orb-1 {
+            background: rgba(34,211,238,0.3);
+            top: -10%; left: -15%;
+        }
+        .hero-orb-2 {
+            background: rgba(59,130,246,0.25);
+            bottom: -10%; right: -10%;
+            animation-delay: -5s;
+        }
+        @keyframes orbFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-40px) scale(1.05); }
+        }
+        .hero-content { position: relative; z-index: 2; max-width: 900px; }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border: 1px solid rgba(34,211,238,0.4);
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--cyan-primary);
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.3s forwards;
+        }
+        .hero-badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            background: var(--cyan-primary);
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+        .hero-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(48px, 7vw, 88px);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.5s forwards;
+        }
+        .hero-title .line { display: block; }
+        .hero-title .accent {
+            background: linear-gradient(135deg, #67e8f9 0%, #22d3ee 40%, #0891b2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-subtitle {
+            font-size: clamp(16px, 2vw, 20px);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 48px;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.7s forwards;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.9s forwards;
+        }
+        .btn-primary {
+            padding: 16px 48px;
+            background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+            color: #030712;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            transition: left 0.5s;
+        }
+        .btn-primary:hover::before { left: 100%; }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(34,211,238,0.4);
+        }
+        .btn-secondary {
+            padding: 16px 48px;
+            background: transparent;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.15);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn-secondary:hover {
+            border-color: var(--cyan-primary);
+            color: var(--cyan-primary);
+            transform: translateY(-2px);
+        }
+        .hero-scroll {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 1.2s forwards;
+        }
+        .hero-scroll span {
+            display: block;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        .scroll-arrow {
+            width: 24px; height: 24px;
+            border-right: 1px solid var(--cyan-primary);
+            border-bottom: 1px solid var(--cyan-primary);
+            transform: rotate(45deg);
+            margin: 0 auto;
+            animation: scrollBounce 2s infinite;
+        }
+
+        /* ============ SECTION TITLES ============ */
+        .section-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--cyan-primary);
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(32px, 4vw, 52px);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        .section-desc {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.8;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 72px;
+        }
+        .section-header .section-desc { margin: 0 auto; }
+        .section-divider {
+            width: 60px; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan-primary), transparent);
+            margin: 20px auto 0;
+        }
+
+        /* ============ SERVICES ============ */
+        #services { background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-deep2) 100%); }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+        .service-card {
+            padding: 40px 28px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-cyan);
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(34,211,238,0.07) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .service-card:hover::before { opacity: 1; }
+        .service-card:hover {
+            border-color: var(--border-cyan-bright);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(34,211,238,0.08), 0 0 0 1px rgba(34,211,238,0.08);
+        }
+        .service-icon {
+            width: 64px; height: 64px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            background: rgba(34,211,238,0.08);
+            border: 1px solid rgba(34,211,238,0.12);
+            font-size: 28px;
+            transition: all 0.4s;
+        }
+        .service-card:hover .service-icon {
+            background: rgba(34,211,238,0.15);
+            box-shadow: 0 0 30px rgba(34,211,238,0.2);
+        }
+        .service-card h3 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .service-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .service-price {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--cyan-primary);
+        }
+        .service-price small {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        /* ============ PRICING ============ */
+        #pricing { background: var(--bg-deep2); }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            align-items: center;
+        }
+        .pricing-card {
+            padding: 48px 36px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-cyan);
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .pricing-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .pricing-card.featured {
+            border-color: var(--cyan-primary);
+            background: rgba(34,211,238,0.03);
+            padding: 56px 36px;
+            transform: translateY(0) scale(1.04);
+            box-shadow: 0 0 80px rgba(34,211,238,0.08);
+        }
+        .pricing-card.featured.visible {
+            box-shadow: 0 0 100px rgba(34,211,238,0.12), 0 0 0 1px rgba(34,211,238,0.15);
+        }
+        .pricing-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 24px;
+            background: linear-gradient(135deg, #22d3ee, #0891b2);
+            color: #030712;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            white-space: nowrap;
+        }
+        .pricing-tier {
+            font-family: 'Playfair Display', serif;
+            font-size: 13px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        .pricing-card.featured .pricing-tier { color: var(--cyan-primary); }
+        .pricing-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .pricing-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+        .pricing-amount {
+            margin-bottom: 32px;
+        }
+        .pricing-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 52px;
+            font-weight: 900;
+            color: var(--cyan-primary);
+            line-height: 1;
+        }
+        .pricing-number .yuan {
+            font-size: 24px;
+            font-weight: 400;
+        }
+        .pricing-number .range {
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .pricing-note {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 36px;
+        }
+        .pricing-features li {
+            padding: 10px 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .pricing-features li::before {
+            content: '◆';
+            color: var(--cyan-primary);
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+        .pricing-features li.disabled {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+        .pricing-features li.disabled::before { content: '·'; color: var(--text-muted); }
+        .pricing-features li .extra-tag {
+            font-size: 10px;
+            padding: 2px 8px;
+            background: rgba(34,211,238,0.1);
+            color: var(--cyan-primary);
+            border-radius: 4px;
+            margin-left: 4px;
+        }
+        .pricing-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1px solid var(--border-cyan);
+            color: var(--cyan-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .pricing-btn:hover {
+            background: var(--cyan-primary);
+            color: var(--bg-deep);
+            box-shadow: 0 0 30px rgba(34,211,238,0.3);
+        }
+        .pricing-card.featured .pricing-btn {
+            background: linear-gradient(135deg, #22d3ee, #0891b2);
+            color: #030712;
+            border-color: transparent;
+        }
+        .pricing-card.featured .pricing-btn:hover {
+            box-shadow: 0 0 40px rgba(34,211,238,0.5);
+            transform: scale(1.02);
+        }
+
+        .discount-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            background: linear-gradient(135deg, rgba(34,211,238,0.15), rgba(59,130,246,0.15));
+            color: var(--cyan-primary);
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 4px;
+            margin-top: 8px;
+            border: 1px solid rgba(34,211,238,0.2);
+        }
+
+        /* ============ GALLERY ============ */
+        #gallery { background: linear-gradient(180deg, var(--bg-deep2) 0%, var(--bg-deep) 100%); }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .gallery-item {
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid rgba(34,211,238,0.08);
+            transition: all 0.4s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .gallery-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .gallery-item:hover {
+            border-color: rgba(34,211,238,0.35);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(34,211,238,0.1);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s;
+        }
+        .gallery-item:hover img { transform: scale(1.05); }
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(3,7,18,0.85) 0%, transparent 50%);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+        .gallery-overlay span {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--cyan-primary);
+            letter-spacing: 1px;
+        }
+
+        /* ============ PROCESS ============ */
+        #process { background: var(--bg-deep); }
+        .process-timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 60px;
+        }
+        .process-timeline::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan-primary), var(--blue-accent), transparent);
+        }
+        .process-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            padding: 0 16px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .process-step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .process-num {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: var(--bg-deep2);
+            border: 2px solid var(--border-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--cyan-primary);
+            position: relative;
+            z-index: 2;
+            transition: all 0.4s;
+        }
+        .process-step:hover .process-num {
+            background: rgba(34,211,238,0.1);
+            box-shadow: 0 0 40px rgba(34,211,238,0.3);
+            border-color: var(--cyan-primary);
+        }
+        .process-step h4 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .process-step p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ============ TESTIMONIALS ============ */
+        /* ============ TRUST ============ */
+        #trust { background: var(--bg-deep2); }
+.trust-badges {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .trust-badge {
+            padding: 32px;
+            background: var(--bg-card);
+            border: 1px solid rgba(34,211,238,0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            transition: all 0.4s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .trust-badge.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .trust-badge:hover {
+            border-color: rgba(34,211,238,0.35);
+            background: rgba(34,211,238,0.03);
+            transform: translateY(-4px);
+        }
+        .trust-badge-icon {
+            width: 52px; height: 52px;
+            border-radius: 12px;
+            background: rgba(34,211,238,0.08);
+            border: 1px solid rgba(34,211,238,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .trust-badge h4 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .trust-badge p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ============ FAQ ============ */
+        #faq { background: var(--bg-deep); }
+        .faq-list { max-width: 720px; margin: 0 auto; }
+        .faq-item {
+            border-bottom: 1px solid rgba(34,211,238,0.06);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .faq-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            cursor: pointer;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 17px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .faq-question:hover { color: var(--cyan-primary); }
+        .faq-toggle {
+            width: 32px; height: 32px;
+            border: 1px solid var(--border-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s;
+            font-size: 18px;
+            color: var(--cyan-primary);
+        }
+        .faq-item.open .faq-toggle {
+            background: var(--cyan-primary);
+            color: var(--bg-deep);
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 300px;
+            padding-bottom: 24px;
+        }
+        .faq-answer p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* ============ CTA ============ */
+        .cta-section {
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 50%, rgba(34,211,238,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 50% 50%, rgba(59,130,246,0.05) 0%, transparent 50%);
+        }
+        .cta-section .container { position: relative; z-index: 1; }
+        .cta-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        .cta-desc {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta-divider {
+            width: 200px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan-primary), transparent);
+            margin: 0 auto 60px;
+        }
+
+        /* ============ FOOTER ============ */
+        .footer {
+            padding: 60px 0 40px;
+            border-top: 1px solid rgba(34,211,238,0.06);
+            background: var(--bg-deep);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+        .footer-brand {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #67e8f9, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+        .footer-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 280px;
+        }
+        .footer-col h4 {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--cyan-primary);
+            margin-bottom: 20px;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        .footer-col ul li a:hover { color: var(--cyan-primary); }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .contact-item .contact-icon {
+            width: 32px; height: 32px;
+            border: 1px solid var(--border-cyan);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            color: var(--cyan-primary);
+        }
+        .footer-bottom {
+            padding-top: 24px;
+            border-top: 1px solid rgba(34,211,238,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-bottom p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* ============ LIGHTBOX ============ */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .lightbox.active { display: flex; }
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 90vh;
+            border-radius: 12px;
+            border: 2px solid var(--border-cyan);
+            box-shadow: 0 0 100px rgba(34,211,238,0.15);
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 48px; height: 48px;
+            border: 1px solid var(--border-cyan);
+            border-radius: 50%;
+            background: transparent;
+            color: var(--cyan-primary);
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .lightbox-close:hover {
+            background: var(--cyan-primary);
+            color: var(--bg-deep);
+        }
+
+        /* ============ ANIMATIONS ============ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.6); }
+        }
+        @keyframes scrollBounce {
+            0%, 100% { transform: rotate(45deg) translateY(0); opacity: 1; }
+            50% { transform: rotate(45deg) translateY(8px); opacity: 0.3; }
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 1024px) {
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+            .pricing-card.featured { transform: none; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .process-timeline { flex-direction: column; gap: 40px; }
+            .process-timeline::before { display: none; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .section { padding: 80px 0; }
+            .services-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 1024px) {
+            .trust-badges { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Stars Background -->
+<canvas id="stars"></canvas>
+<div class="bg-atmosphere"></div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+    <div class="container">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">智笔学府</a>
+            <ul class="nav-links">
+                <li><a href="#services">服务</a></li>
+                <li><a href="#pricing">定价</a></li>
+                <li><a href="#gallery">案例</a></li>
+                <li><a href="#process">流程</a></li>
+                <li><a href="#faq">问答</a></li>
+            </ul>
+            <a href="#pricing" class="nav-cta">立即咨询</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+    <div class="hero-bg-gradient"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-content">
+        <div class="hero-badge">专业 · 高效 · 权威</div>
+        <h1 class="hero-title">
+            <span class="line">让学术表达</span>
+            <span class="line accent">更具力量</span>
+        </h1>
+        <p class="hero-subtitle">
+            专为大专学生打造，亲民价格 + 专业品质。<br>
+            软件 + 论文打包交付，让毕业不再头疼。
+        </p>
+        <div class="hero-actions">
+            <a href="#pricing" class="btn-primary">查看服务方案</a>
+            <a href="#gallery" class="btn-secondary">了解案例作品</a>
+        </div>
+    </div>
+    <div class="hero-scroll">
+        <span>向下滚动</span>
+        <div class="scroll-arrow"></div>
+    </div>
+</section>
+
+<!-- Services -->
+<section class="section" id="services">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-label">What We Offer</div>
+            <h2 class="section-title">全方位学术服务</h2>
+            <p class="section-desc">从论文写作到软件开发，提供一站式学术解决方案</p>
+            <div class="section-divider"></div>
+        </div>
+        <div class="services-grid">
+            <div class="service-card" data-delay="0">
+                <div class="service-icon">📝</div>
+                <h3>论文代写</h3>
+                <p>专业团队执笔，涵盖各学科，字数不限，含完整查重报告</p>
+                <div class="service-price">¥150起 <small>/ 视难度浮动</small></div>
+            </div>
+            <div class="service-card" data-delay="100">
+                <div class="service-icon">💻</div>
+                <h3>软件开发</h3>
+                <p>配套软件系统开发，前后端完整系统，含部署文档</p>
+                <div class="service-price">¥200起 <small>/ 视功能浮动</small></div>
+            </div>
+            <div class="service-card" data-delay="200">
+                <div class="service-icon">📊</div>
+                <h3>PPT制作</h3>
+                <p>专业视觉设计，内容精炼，排版精美，支持多次修改</p>
+                <div class="service-price">¥60 <small>/ 可升级减免</small></div>
+            </div>
+            <div class="service-card" data-delay="300">
+                <div class="service-icon">🤝</div>
+                <h3>售后服务</h3>
+                <p>全程跟进答疑，修改建议，终身售后保障，服务至满意</p>
+                <div class="service-price">¥60 <small>/ 全程陪伴</small></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing -->
+<section class="section" id="pricing">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-label">Price Plan</div>
+            <h2 class="section-title">透明定价，灵活选择</h2>
+            <p class="section-desc">根据项目难度量身定价，绝无隐形收费</p>
+            <div class="section-divider"></div>
+        </div>
+        <div class="pricing-grid">
+            <!-- Basic -->
+            <div class="pricing-card" data-delay="0">
+                <div class="pricing-tier">Basic</div>
+                <h3 class="pricing-title">论文档</h3>
+                <p class="pricing-subtitle">单篇论文，专注写作</p>
+                <div class="pricing-amount">
+                    <div class="pricing-number"><span class="yuan">¥</span>150<span style="font-size:28px">~250</span></div>
+                    <div class="pricing-note">字数不限，含查重报告</div>
+                </div>
+                <ul class="pricing-features">
+                    <li>专业论文写作</li>
+                    <li>字数不限</li>
+                    <li>提供查重报告</li>
+                    <li>基础售后答疑</li>
+                    <li class="disabled">配套软件开发</li>
+                    <li class="disabled">专业PPT制作</li>
+                </ul>
+                <a href="#footer-contact" class="pricing-btn">立即选择</a>
+            </div>
+
+            <!-- Pro (Featured) -->
+            <div class="pricing-card featured" data-delay="150">
+                <div class="pricing-badge">旗舰方案</div>
+                <div class="pricing-tier">Flagship</div>
+                <h3 class="pricing-title">软硬结合档</h3>
+                <p class="pricing-subtitle">论文 + 软件，含完整数据</p>
+                <div class="pricing-amount">
+                    <div class="pricing-number"><span class="yuan">¥</span><span class="range">300~450</span></div>
+                    <div class="pricing-note">根据难度综合定价，含一切交付物</div>
+                    <div class="discount-tag">◆ 旗舰专属减免</div>
+                </div>
+                <ul class="pricing-features">
+                    <li>专业论文写作</li>
+                    <li>配套软件开发</li>
+                    <li>含完整测试数据</li>
+                    <li>专业PPT制作 <span class="extra-tag">-¥15</span></li>
+                    <li>售后服务 <span class="extra-tag">-¥15</span></li>
+                    <li>PPT无限次修改 <span class="extra-tag">-¥15</span></li>
+                </ul>
+                <a href="#footer-contact" class="pricing-btn">选择旗舰方案</a>
+            </div>
+
+            <!-- Custom -->
+            <div class="pricing-card" data-delay="300">
+                <div class="pricing-tier">Custom</div>
+                <h3 class="pricing-title">定制难度档</h3>
+                <p class="pricing-subtitle">根据项目难度定价</p>
+                <div class="pricing-amount">
+                    <div class="pricing-number"><span class="yuan">¥</span><span class="range">300~450</span></div>
+                    <div class="pricing-note">论文 + 软件，难度浮动报价</div>
+                </div>
+                <ul class="pricing-features">
+                    <li>专业论文写作</li>
+                    <li>配套软件开发</li>
+                    <li>根据难度定价</li>
+                    <li>全程跟进答疑</li>
+                    <li>可加购PPT服务</li>
+                    <li>可加购售后服务</li>
+                </ul>
+                <a href="#footer-contact" class="pricing-btn">咨询详情</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery -->
+<section class="section" id="gallery">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-label">Our Work</div>
+            <h2 class="section-title">软件案例展示</h2>
+            <p class="section-desc">部分交付案例截图，展示我们的技术实力</p>
+            <div class="section-divider"></div>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item" data-delay="0">
+                <img src="file:///C:/Users/27567/Desktop/tupian1/1.jpeg" alt="案例截图1" loading="lazy">
+                <div class="gallery-overlay"><span>案例截图 1</span></div>
+            </div>
+            <div class="gallery-item" data-delay="100">
+                <img src="file:///C:/Users/27567/Desktop/tupian1/3.jpeg" alt="案例截图2" loading="lazy">
+                <div class="gallery-overlay"><span>案例截图 2</span></div>
+            </div>
+            <div class="gallery-item" data-delay="200">
+                <img src="file:///C:/Users/27567/Desktop/tupian1/4.jpeg" alt="案例截图3" loading="lazy">
+                <div class="gallery-overlay"><span>案例截图 3</span></div>
+            </div>
+            <div class="gallery-item" data-delay="300">
+                <img src="file:///C:/Users/27567/Desktop/tupian1/26.jpeg" alt="案例截图4" loading="lazy">
+                <div class="gallery-overlay"><span>案例截图 4</span></div>
+            </div>
+            <div class="gallery-item" data-delay="400">
+                <img src="file:///C:/Users/27567/Desktop/tupian1/86.jpeg" alt="案例截图5" loading="lazy">
+                <div class="gallery-overlay"><span>案例截图 5</span></div>
+            </div>
+            <div class="gallery-item" data-delay="500">
+                <img src="file:///C:/Users/27567/Desktop/tupian1/526.jpeg" alt="案例截图6" loading="lazy">
+                <div class="gallery-overlay"><span>案例截图 6</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Process -->
+<section class="section" id="process">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-label">Our Process</div>
+            <h2 class="section-title">标准化服务流程</h2>
+            <p class="section-desc">六步走战略，全程透明可追踪</p>
+            <div class="section-divider"></div>
+        </div>
+        <div class="process-timeline">
+            <div class="process-step" data-delay="0">
+                <div class="process-num">01</div>
+                <h4>需求沟通</h4>
+                <p>深度了解您的学术要求、课题方向与期望目标</p>
+            </div>
+            <div class="process-step" data-delay="150">
+                <div class="process-num">02</div>
+                <h4>方案制定</h4>
+                <p>根据难度评估，制定写作方案与报价清单</p>
+            </div>
+            <div class="process-step" data-delay="300">
+                <div class="process-num">03</div>
+                <h4>大纲确认</h4>
+                <p>交付论文大纲，确认章节结构与核心论点</p>
+            </div>
+            <div class="process-step" data-delay="450">
+                <div class="process-num">04</div>
+                <h4>分步交付</h4>
+                <p>分章节交付，随时沟通修改，确保符合预期</p>
+            </div>
+            <div class="process-step" data-delay="600">
+                <div class="process-num">05</div>
+                <h4>终稿交付</h4>
+                <p>全文整合、格式调整、查重报告一并交付</p>
+            </div>
+            <div class="process-step" data-delay="750">
+                <div class="process-num">06</div>
+                <h4>售后保障</h4>
+                <p>后续修改建议、答辩指导，终身售后支持</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trust -->
+<section class="section" id="trust">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-label">Why Choose Us</div>
+            <h2 class="section-title">为什么选择我们</h2>
+            <p class="section-desc">用数据说话，用服务证明</p>
+            <div class="section-divider"></div>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="trust-badges">
+            <div class="trust-badge" data-delay="0">
+                <div class="trust-badge-icon">📋</div>
+                <div>
+                    <h4>一对一全程跟进</h4>
+                    <p>从需求沟通到终稿交付，同一位负责人跟进，不用反复对接。</p>
+                </div>
+            </div>
+            <div class="trust-badge" data-delay="150">
+                <div class="trust-badge-icon">💰</div>
+                <div>
+                    <h4>价格透明无坑</h4>
+                    <p>明码标价，报价即最终价，不临时加价，不中途加项。</p>
+                </div>
+            </div>
+            <div class="trust-badge" data-delay="300">
+                <div class="trust-badge-icon">🔄</div>
+                <div>
+                    <h4>软硬件打包交付</h4>
+                    <p>论文 + 软件 + 数据 + PPT 一套带走，一条龙服务。</p>
+                </div>
+            </div>
+            <div class="trust-badge" data-delay="450">
+                <div class="trust-badge-icon">🏫</div>
+                <div>
+                    <h4>本校本地经营，跑不了单</h4>
+                    <p>而且我们做的是自己学校的生意，这也保证我们跑不了单。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-label">FAQ</div>
+            <h2 class="section-title">常见问题</h2>
+            <p class="section-desc">您最关心的问题，我们一一解答</p>
+            <div class="section-divider"></div>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item" data-delay="0">
+                <div class="faq-question">
+                    <span>论文代写需要多长时间？</span>
+                    <div class="faq-toggle">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>根据论文字数和难度，一般7~15个工作日完成初稿。加急服务可缩短至3~5天，需额外支付加急费用。建议提前沟通，确保充足修改时间。</p>
+                </div>
+            </div>
+            <div class="faq-item" data-delay="100">
+                <div class="faq-question">
+                    <span>如何保证论文的原创性？</span>
+                    <div class="faq-toggle">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>每篇论文均附带专业查重报告（知网/维普），重复率控制在15%以下。我们采用一对一写作模式，绝不用AI批量生成，保证每一篇都是定制原创。</p>
+                </div>
+            </div>
+            <div class="faq-item" data-delay="200">
+                <div class="faq-question">
+                    <span>软硬结合档的价格如何确定？</span>
+                    <div class="faq-toggle">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>根据课题难度、功能需求、字数要求综合评估，一般在¥300~450之间。下单前会给出详细报价清单，无任何隐形收费，旗舰档额外享受PPT和售后服务的减免优惠。</p>
+                </div>
+            </div>
+            <div class="faq-item" data-delay="300">
+                <div class="faq-question">
+                    <span>购买后可以修改吗？</span>
+                    <div class="faq-toggle">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>当然可以。论文初稿交付后提供免费修改轮次（根据档位），PPT制作支持多次修改。后续每次小调整仅收取极低费用，售后服务全程跟进。</p>
+                </div>
+            </div>
+            <div class="faq-item" data-delay="400">
+                <div class="faq-question">
+                    <span>如何下单和支付？</span>
+                    <div class="faq-toggle">+</div>
+                </div>
+                <div class="faq-answer">
+                    <p>添加客服微信/QQ，发送您的课题要求和档位选择 → 客服评估难度给出最终报价 → 确认后支付定金（50%）→ 开始工作 → 满意后支付尾款。支持微信、支付宝转账。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="container">
+        <div class="section-label" style="margin-bottom:16px;">Ready to Start</div>
+        <h2 class="cta-title">开启您的学术之旅</h2>
+        <p class="cta-desc">从今天起，让专业的人做专业的事</p>
+        <div class="cta-divider"></div>
+        <div class="hero-actions">
+            <a href="#pricing" class="btn-primary">选择服务方案</a>
+            <a href="#services" class="btn-secondary">了解更多</a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer" id="footer-contact">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">智笔学府</div>
+                <p class="footer-desc">专为大专学生打造，亲民价格 + 专业品质，软件论文一站搞定。</p>
+                <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 10px;">
+                    <div class="contact-item">
+                        <div class="contact-icon">💬</div>
+                        <span>微信：cyax12345</span>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">🐧</div>
+                        <span>QQ：2756738528</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>服务项目</h4>
+                <ul>
+                    <li><a href="#services">论文代写</a></li>
+                    <li><a href="#services">软件开发</a></li>
+                    <li><a href="#services">PPT制作</a></li>
+                    <li><a href="#services">售后服务</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>价格档位</h4>
+                <ul>
+                    <li><a href="#pricing">论文档 ¥150~250</a></li>
+                    <li><a href="#pricing">定制难度档 ¥300~450</a></li>
+                    <li><a href="#pricing">软硬结合档 ¥300~450</a></li>
+                    <li><a href="#pricing">PPT ¥60 / 修改 ¥20</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>工作时间</h4>
+                <ul>
+                    <li><a href="#">周一至周日</a></li>
+                    <li><a href="#">9:00 — 22:00</a></li>
+                    <li><a href="#">快速响应</a></li>
+                    <li><a href="#">全程跟进</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 智笔学府. All rights reserved.</p>
+            <p style="color: var(--cyan-primary); font-size:12px; letter-spacing:2px;">ACADEMIC EXCELLENCE</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close">&times;</button>
+    <img src="" alt="预览" id="lightbox-img">
+</div>
+
+<script>
+    // ========== STARS ==========
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Star {
+        constructor() { this.reset(true); }
+        reset(initial) {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.baseSize = Math.random() * 2.5 + 0.5;
+            this.size = this.baseSize;
+            this.twinkleSpeed = Math.random() * 0.02 + 0.005;
+            this.twinkleOffset = Math.random() * Math.PI * 2;
+            this.hue = Math.random() > 0.6 ? 190 : (Math.random() > 0.5 ? 210 : 0);
+            this.alpha = Math.random() * 0.6 + 0.2;
+            if (initial) {
+                this.y = Math.random() * canvas.height;
+            } else {
+                this.y = -5;
+                this.x = Math.random() * canvas.width;
+            }
+            this.speed = Math.random() * 0.15 + 0.03;
+        }
+        update(time) {
+            this.y += this.speed;
+            this.size = this.baseSize * (0.5 + 0.5 * Math.sin(time * this.twinkleSpeed + this.twinkleOffset));
+            if (this.y > canvas.height + 5) this.reset(false);
+        }
+        draw() {
+            const a = this.alpha * (0.3 + 0.7 * (this.size / (this.baseSize * 1.5)));
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, Math.max(0.3, this.size), 0, Math.PI * 2);
+            if (this.hue === 190) {
+                ctx.fillStyle = `rgba(34,211,238,${a})`;
+            } else if (this.hue === 210) {
+                ctx.fillStyle = `rgba(147,197,253,${a})`;
+            } else {
+                ctx.fillStyle = `rgba(255,255,255,${a})`;
+            }
+            ctx.fill();
+            // Glow
+            if (this.size > 1) {
+                const grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 4);
+                if (this.hue === 190) {
+                    grd.addColorStop(0, `rgba(34,211,238,${a * 0.4})`);
+                } else if (this.hue === 210) {
+                    grd.addColorStop(0, `rgba(147,197,253,${a * 0.4})`);
+                } else {
+                    grd.addColorStop(0, `rgba(255,255,255,${a * 0.3})`);
+                }
+                grd.addColorStop(1, 'transparent');
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2);
+                ctx.fillStyle = grd;
+                ctx.fill();
+            }
+        }
+    }
+
+    const starCount = Math.min(200, Math.floor(canvas.width * canvas.height / 8000));
+    for (let i = 0; i < starCount; i++) {
+        stars.push(new Star());
+    }
+
+    // Trailing stars
+    let time = 0;
+    function animateStars() {
+        time++;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => {
+            s.update(time);
+            s.draw();
+        });
+        requestAnimationFrame(animateStars);
+    }
+    animateStars();
+
+    // ========== NAV SCROLL ==========
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 60) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
+
+    // ========== INTERSECTION OBSERVER ==========
+    const observerOptions = { threshold: 0.12, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const delay = entry.target.dataset.delay || 0;
+                setTimeout(() => entry.target.classList.add('visible'), delay);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.service-card, .pricing-card, .gallery-item, .process-step, .trust-badge, .faq-item')
+        .forEach(el => observer.observe(el));
+
+    // ========== FAQ ==========
+    document.querySelectorAll('.faq-question').forEach(q => {
+        q.addEventListener('click', () => {
+            const item = q.parentElement;
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!isOpen) item.classList.add('open');
+        });
+    });
+
+    // ========== LIGHTBOX ==========
+    document.querySelectorAll('.gallery-item').forEach(item => {
+        item.addEventListener('click', () => {
+            document.getElementById('lightbox-img').src = item.querySelector('img').src;
+            document.getElementById('lightbox').classList.add('active');
+        });
+    });
+    document.getElementById('lightbox-close').addEventListener('click', () => {
+        document.getElementById('lightbox').classList.remove('active');
+    });
+    document.getElementById('lightbox').addEventListener('click', e => {
+        if (e.target === e.currentTarget) e.currentTarget.classList.remove('active');
+    });
+
+    // ========== SMOOTH SCROLL ==========
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        });
+    });
+</script>
+
+</body>
+</html>
